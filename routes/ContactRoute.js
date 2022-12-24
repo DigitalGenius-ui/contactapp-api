@@ -3,6 +3,8 @@ import { Contact } from "../db/Schema.js";
 
 const router = express.Router();
 
+
+
 // add contact
 router.post("/create", async (req, res) => {
   let newContact = new Contact(req.body);
@@ -21,6 +23,7 @@ router.put("/update/:id", async (req, res) => {
     const updatedContact = await Contact.findByIdAndUpdate(req.params.id, {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
+      email : req.body.email
     });
     res.status(200).json(updatedContact);
   } catch (error) {
@@ -38,8 +41,18 @@ router.delete("/delete/:id", async (req, res) => {
   }
 });
 
+// remove all 
+router.delete("/remove", async (req, res) => {
+  try {
+    const remove = await Contact.deleteMany();
+    res.status(200).json(remove);
+  } catch (error) {
+    res.status(401).json(error);
+  }
+})
+
 // get all post
-router.get("/", async (req, res) => {
+router.get("/add", async (req, res) => {
   try {
     const result = await Contact.find();
     res.status(200).json(result);
